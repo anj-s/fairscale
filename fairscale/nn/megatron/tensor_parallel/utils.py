@@ -6,6 +6,28 @@ import torch
 
 import fairscale.nn.megatron.tensor_parallel.initialize as parallel_state
 
+
+class GlobalMemoryBuffer:
+    """Global buffer to avoid dynamic memory allocations.
+    Caller should ensure that buffers of the same name
+    are not used concurrently."""
+
+    def __init__(self):
+        self.buffer = {}
+
+    def get_tensor(self, tensor_shape, dtype, name):
+        required_len = reduce(operator.mul, tensor_shape, 1)
+        if (
+            self.buffer.get((name, dtype), None) is None
+            or self.buffer[(name, dtype)].numel() < required_len
+        ):
+            self.buffer[(name, dtype)] = torch.empty(
+                required_len, dtype=dtype, device=torch.cuda.current_device(), requires_grad=False
+            )
+
+        return self.buffer[(name, dtype)][0:required_len].view(*tensor_shape)
+
+
 def assert_viewless_tensor(tensor, extra_msg=None):
     '''Assert that a tensor is not a view (i.e., its '._base' field is
     not set).'''

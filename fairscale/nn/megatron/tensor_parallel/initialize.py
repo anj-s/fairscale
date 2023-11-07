@@ -10,7 +10,7 @@
 
 import torch
 
-from .utils import ensure_divisibility
+from .utils import ensure_divisibility, GlobalMemoryBuffer
 
 
 # Intra-layer model parallel group that the current rank belongs to.
@@ -284,3 +284,21 @@ def get_tensor_model_parallel_src_rank():
     global_rank = torch.distributed.get_rank()
     local_world_size = get_tensor_model_parallel_world_size()
     return (global_rank // local_world_size) * local_world_size
+
+def _set_global_memory_buffer():
+    """Initialize global buffer"""
+    global _GLOBAL_MEMORY_BUFFER
+    assert _GLOBAL_MEMORY_BUFFER is None, 'global memory buffer is already initialized'
+    _GLOBAL_MEMORY_BUFFER = GlobalMemoryBuffer()
+
+
+def get_global_memory_buffer():
+    """Return the global GlobalMemoryBuffer object"""
+    assert _GLOBAL_MEMORY_BUFFER is not None, 'global memory buffer is not initialized'
+    return _GLOBAL_MEMORY_BUFFER
+
+
+def destroy_global_memory_buffer():
+    """Sets the global memory buffer to None"""
+    global _GLOBAL_MEMORY_BUFFER
+    _GLOBAL_MEMORY_BUFFER = None
