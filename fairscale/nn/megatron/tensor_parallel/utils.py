@@ -4,7 +4,7 @@ from typing import List, Sequence
 
 import torch
 
-import initialize as parallel_state
+import fairscale.nn.megatron.tensor_parallel.initialize as parallel_state
 
 def assert_viewless_tensor(tensor, extra_msg=None):
     '''Assert that a tensor is not a view (i.e., its '._base' field is
