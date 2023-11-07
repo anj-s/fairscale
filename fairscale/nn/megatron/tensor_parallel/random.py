@@ -13,7 +13,7 @@ from torch.utils.checkpoint import detach_variable
 
 from .initialize import (
     get_data_parallel_rank,
-    get_expert_model_parallel_rank,
+    # get_expert_model_parallel_rank,
     get_tensor_model_parallel_group,
     get_tensor_model_parallel_rank,
     get_tensor_model_parallel_world_size,
