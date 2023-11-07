@@ -4,8 +4,8 @@
 # LICENSE file in the root directory of this source tree.
 #
 # Taken from:
-# https://github.com/ngoyal2707/Megatron-LM/blob/fa6c0860b62e4ed2ac13a513e7d950d72f576a44/megatron/mpu/initialize.py
-
+# https://github.com/facebookresearch/metaseq/blob/main/metaseq/modules/megatron/mpu/initialize.py#L50
+# TODO(anj): Update this with the latest code from Megatron-LM initialize.py.
 """Model and data parallel groups."""
 
 import torch

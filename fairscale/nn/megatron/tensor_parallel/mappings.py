@@ -2,7 +2,7 @@
 
 import torch
 
-from megatron.core.parallel_state import (
+from .initialize import (
     get_tensor_and_expert_parallel_group,
     get_tensor_model_parallel_group,
     get_tensor_model_parallel_rank,
