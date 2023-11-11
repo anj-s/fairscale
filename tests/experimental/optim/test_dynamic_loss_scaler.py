@@ -12,7 +12,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
-from fairscale.experimental.optim.dynamic_loss_scaler import DynamicLossScaler
+from fairscale.optim.dynamic_loss_scaler import DynamicLossScaler
 
 
 class ManualLinearRegression(nn.Module):

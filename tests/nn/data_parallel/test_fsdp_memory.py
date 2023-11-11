@@ -22,8 +22,8 @@ from fairscale.fair_dev.testing.testing import dist_init, dump_all_tensors, skip
 from fairscale.internal import torch_version
 from fairscale.internal.parallel import get_process_group_cached
 from fairscale.nn import checkpoint_wrapper
-from fairscale.nn.data_parallel import FullyShardedDataParallel as FSDP
-from fairscale.nn.data_parallel import auto_wrap_bn
+from fairscale.nn.data_parallel.fsdp import FullyShardedDataParallel as FSDP
+from fairscale.nn.data_parallel.fsdp import auto_wrap_bn
 
 
 def to_fsdp(module, fsdp_config):

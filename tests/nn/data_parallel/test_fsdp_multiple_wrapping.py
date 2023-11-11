@@ -19,8 +19,8 @@ from torch.optim import SGD
 
 from fairscale.fair_dev.testing.testing import dist_init, skip_if_no_cuda, teardown
 from fairscale.internal import torch_version
-from fairscale.nn.data_parallel import FullyShardedDataParallel as FSDP
-from fairscale.nn.data_parallel import TrainingState
+from fairscale.nn.data_parallel.fsdp import FullyShardedDataParallel as FSDP
+from fairscale.nn.data_parallel.fsdp import TrainingState
 
 
 def _test_func(rank, world_size, fsdp_config, tempfile_name, unused):

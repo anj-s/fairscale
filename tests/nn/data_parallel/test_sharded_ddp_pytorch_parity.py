@@ -26,7 +26,7 @@ from fairscale.fair_dev.testing.testing import (
     temp_files_ctx,
 )
 from fairscale.internal import torch_version
-from fairscale.nn.data_parallel import ShardedDataParallel
+from fairscale.nn.data_parallel.fsdp import ShardedDataParallel
 from fairscale.optim import OSS
 
 if torch_version() >= (1, 8, 0):

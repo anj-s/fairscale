@@ -7,13 +7,16 @@ from typing import List
 
 import torch.distributed as dist
 
-from .activation_checkpoint import checkpoint_wrapper
-from .data_parallel.fsdp import FullyShardedDataParallel
+from .fully_sharded_data_parallel import (
+    FullyShardedDataParallel,
+    TrainingState,
+    auto_wrap_bn,
+    get_fsdp_instances,
+    no_pre_load_state_dict_hook,
+)
 
 if dist.is_available():
     # Prevent import failure if dist is not available. #1057
-    from .data_parallel.fsdp import ShardedDataParallel
-
-from .misc import FlattenParamsWrapper
+    from ..sharded_ddp import ShardedDataParallel
 
 __all__: List[str] = []

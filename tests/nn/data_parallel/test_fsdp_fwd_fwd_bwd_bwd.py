@@ -8,7 +8,7 @@ import torch.nn as nn
 
 from fairscale.fair_dev.testing.testing import skip_if_single_gpu, temp_files_ctx
 from fairscale.nn import enable_wrap, wrap
-from fairscale.nn.data_parallel import FullyShardedDataParallel
+from fairscale.nn.data_parallel.fsdp import FullyShardedDataParallel
 
 
 class FFN(nn.Module):

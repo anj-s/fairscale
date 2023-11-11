@@ -24,7 +24,7 @@ from fairscale.fair_dev.testing.testing import (
     teardown,
     temp_files_ctx,
 )
-from fairscale.nn.data_parallel import FullyShardedDataParallel as FSDP
+from fairscale.nn.data_parallel.fsdp import FullyShardedDataParallel as FSDP
 
 
 class Model(Module):

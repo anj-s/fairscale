@@ -83,7 +83,7 @@ def test_single_run():
         pytest.skip("torch.fx doesn't seem to work 3.11 yet")
     if torch_version() < (1, 8, 0):
         pytest.skip("requires torch version >= 1.8.0")
-    from fairscale.experimental.nn.auto_shard import shard_model
+    from fairscale.nn.data_parallel.fsdp.auto_shard import shard_model
 
     model = TransformerModel(ntokens, emsize, nhead, nhid, nlayers, dropout)
     sharded_model = shard_model(model)
@@ -137,7 +137,7 @@ class BranchedNetwork(torch.nn.Module):
 def test_dynaimc_conditionals_auto_wrapped():
     if torch_version() < (1, 8, 0):
         pytest.skip("requires torch version >= 1.8.0")
-    from fairscale.experimental.nn.auto_shard import shard_model
+    from fairscale.nn.data_parallel.fsdp.auto_shard import shard_model
 
     features = 10
 

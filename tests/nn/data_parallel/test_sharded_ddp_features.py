@@ -26,7 +26,7 @@ from fairscale.fair_dev.testing.testing import (
     skip_if_single_gpu,
     temp_files_ctx,
 )
-from fairscale.nn.data_parallel import ShardedDataParallel
+from fairscale.nn.data_parallel.fsdp import ShardedDataParallel
 from fairscale.optim import OSS
 
 

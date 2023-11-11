@@ -19,7 +19,7 @@ from fairscale.fair_dev.testing.testing import skip_if_no_cuda
 from fairscale.internal import torch_version
 
 if torch_version() >= (1, 8, 0):
-    from fairscale.experimental.nn.auto_shard import shard_model
+    from fairscale.nn.data_parallel.fsdp.auto_shard import shard_model
 
 
 def _init():

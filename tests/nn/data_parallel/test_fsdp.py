@@ -29,7 +29,7 @@ from fairscale.fair_dev.testing.testing import (
 )
 from fairscale.internal import torch_version
 from fairscale.nn.checkpoint.checkpoint_activations import checkpoint_wrapper
-from fairscale.nn.data_parallel import FullyShardedDataParallel, TrainingState
+from fairscale.nn.data_parallel.fsdp import FullyShardedDataParallel, TrainingState
 
 if torch_version() >= (1, 8, 0):
     from fairscale.optim.grad_scaler import ShardedGradScaler

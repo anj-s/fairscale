@@ -9,7 +9,6 @@
 import logging
 from typing import List
 
-from .adascale import AdaScale, AdaScaleWrapper
 from .oss import OSS
 
 try:

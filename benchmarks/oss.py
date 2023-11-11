@@ -26,7 +26,7 @@ from torchvision.datasets import MNIST
 from torchvision.transforms import Compose, Resize, ToTensor
 
 from benchmarks.datasets.mnist import setup_cached_mnist
-from fairscale.nn.data_parallel import ShardedDataParallel as ShardedDDP
+from fairscale.nn.data_parallel.fsdp import ShardedDataParallel as ShardedDDP
 from fairscale.optim import OSS
 from fairscale.optim.grad_scaler import ShardedGradScaler
 

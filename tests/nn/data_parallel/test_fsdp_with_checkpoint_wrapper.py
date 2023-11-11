@@ -15,7 +15,7 @@ import torch.multiprocessing as mp
 
 from fairscale.fair_dev.testing.testing import dist_init, skip_if_single_gpu, teardown, temp_files_ctx
 from fairscale.nn.checkpoint.checkpoint_activations import checkpoint_wrapper
-from fairscale.nn.data_parallel import FullyShardedDataParallel as FSDP
+from fairscale.nn.data_parallel.fsdp import FullyShardedDataParallel as FSDP
 
 
 @skip_if_single_gpu

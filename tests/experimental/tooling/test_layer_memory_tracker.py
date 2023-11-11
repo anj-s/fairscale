@@ -10,7 +10,7 @@ import torch.multiprocessing as mp
 import torch.nn as nn
 from torch.nn.parallel import DistributedDataParallel
 
-from fairscale.experimental.tooling.layer_memory_tracker import (
+from fairscale.tools.layer_memory_tracker import (
     LayerwiseMemoryTracker,
     ProcessGroupTracker,
     find_best_reset_points,

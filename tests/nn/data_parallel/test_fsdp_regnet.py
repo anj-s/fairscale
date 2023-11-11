@@ -43,8 +43,8 @@ from fairscale.fair_dev.testing.testing import (
     torch_cuda_version,
 )
 from fairscale.internal import torch_version
-from fairscale.nn.data_parallel import FullyShardedDataParallel as FSDP
-from fairscale.nn.data_parallel import TrainingState, auto_wrap_bn
+from fairscale.nn.data_parallel.fsdp import FullyShardedDataParallel as FSDP
+from fairscale.nn.data_parallel.fsdp import TrainingState, auto_wrap_bn
 
 if torch_version() >= (1, 8, 0):
     from fairscale.optim.grad_scaler import ShardedGradScaler

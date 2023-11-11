@@ -24,7 +24,7 @@ from torch.optim import Adam
 
 from benchmarks.golden_configs.lm_wikitext2 import FSDP as lm_wikitext2
 from fairscale.nn import auto_wrap, default_auto_wrap_policy, enable_wrap
-from fairscale.nn.data_parallel import FullyShardedDataParallel as FSDP
+from fairscale.nn.data_parallel.fsdp import FullyShardedDataParallel as FSDP
 
 RPC_PORT = 29501
 
