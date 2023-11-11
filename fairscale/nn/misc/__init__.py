@@ -9,7 +9,7 @@ from typing import List
 # in favor of fairscale.nn.checkpoint.checkpoint_wrapper.
 from fairscale.nn.checkpoint import checkpoint_wrapper
 
-from .flatten_params_wrapper import FlattenParamsWrapper, _enable_pre_load_state_dict_hook
-from .param_bucket import GradBucket, ParamBucket
+from ..data_parallel.fsdp.flatten_params_wrapper import FlattenParamsWrapper, _enable_pre_load_state_dict_hook
+from ..data_parallel.fsdp.param_bucket import GradBucket, ParamBucket
 
 __all__: List[str] = []
