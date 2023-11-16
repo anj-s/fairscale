@@ -10,9 +10,4 @@ import torch.distributed as dist
 from .activation_checkpoint import checkpoint_wrapper
 from .data_parallel.fsdp import FullyShardedDataParallel
 
-if dist.is_available():
-    # Prevent import failure if dist is not available. #1057
-    from .data_parallel.fsdp import ShardedDataParallel
-
-
 __all__: List[str] = []
