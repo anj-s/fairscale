@@ -15,9 +15,7 @@ from torch import Tensor
 import torch.nn as nn
 import torch.utils.checkpoint as torch_checkpoint
 
-from fairscale.internal.containers import pack_kwargs, split_non_tensors, unpack_kwargs, unpack_non_tensors
-
-from .checkpoint_utils import patch_batchnorm
+from fairscale.nn.misc.containers import pack_kwargs, split_non_tensors, unpack_kwargs, unpack_non_tensors
 
 
 # https://docs.python.org/3/library/threading.html#thread-local-data
@@ -146,8 +144,6 @@ def checkpoint_wrapper(
         (nn.Module):
             Wrapped module
     """
-    # Patch the batchnorm layers in case there are any in this module.
-    patch_batchnorm(module)
 
     # The use of weakref here is to prevent creating a ref cycle: m -> m.forward -> m.
     # When such cycle exists, gc won't collect the module when the module is freed.

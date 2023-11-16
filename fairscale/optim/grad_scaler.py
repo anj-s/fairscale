@@ -18,6 +18,7 @@ import torch.distributed as dist
 from torch.optim import Optimizer
 from torch.optim.sgd import SGD
 
+# TODO(anj): Modify import
 from fairscale.internal import torch_version
 
 

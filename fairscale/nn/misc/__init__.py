@@ -7,7 +7,7 @@ from typing import List
 
 # TODO(anj-s): Remove this once we have deprecated fairscale.nn.misc.checkpoint_wrapper path
 # in favor of fairscale.nn.checkpoint.checkpoint_wrapper.
-from fairscale.nn.checkpoint import checkpoint_wrapper
+from fairscale.nn.activation_checkpoint import checkpoint_wrapper
 
 from ..data_parallel.fsdp.flatten_params_wrapper import FlattenParamsWrapper, _enable_pre_load_state_dict_hook
 from ..data_parallel.fsdp.param_bucket import GradBucket, ParamBucket

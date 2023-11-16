@@ -21,7 +21,7 @@ from torch.autograd import Variable
 import torch.autograd.profiler as profiler
 import torch.distributed as dist
 
-from fairscale.internal.params import Workhandle, get_global_rank
+from fairscale.nn.misc.params import Workhandle, get_global_rank
 from fairscale.nn.misc import GradBucket
 from fairscale.optim import OSS
 

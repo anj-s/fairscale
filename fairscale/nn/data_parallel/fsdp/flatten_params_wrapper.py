@@ -30,7 +30,7 @@ import torch
 from torch import Tensor
 import torch.nn as nn
 
-from fairscale.internal.state_dict import replace_by_prefix_
+from fairscale.nn.misc.state_dict import replace_by_prefix_
 
 if TYPE_CHECKING:
     from collections import OrderedDict  # noqa: F401

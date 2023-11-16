@@ -37,17 +37,17 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn.parameter import Parameter
 
-from fairscale.internal.containers import apply_to_tensors
-from fairscale.internal.parallel import (
+from fairscale.nn.misc.containers import apply_to_tensors
+from fairscale.nn.misc.parallel import (
     ProcessGroupName,
     chunk_and_pad,
     enable_pytorch_sync_bn,
     get_process_group_cached,
     validate_process_group,
 )
-from fairscale.internal.params import calc_grad_norm, recursive_copy_to_device
-from fairscale.internal.reduce_scatter_bucketer import ReduceScatterBucketer
-from fairscale.internal.state_dict import replace_by_prefix_
+from fairscale.nn.misc.params import calc_grad_norm, recursive_copy_to_device
+from fairscale.nn.misc.reduce_scatter_bucketer import ReduceScatterBucketer
+from fairscale.nn.misc.state_dict import replace_by_prefix_
 from fairscale.nn.misc import FlattenParamsWrapper, _enable_pre_load_state_dict_hook
 from fairscale.nn.wrap import auto_wrap, config_auto_wrap_policy, enable_wrap
 
