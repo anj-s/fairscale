@@ -14,7 +14,7 @@ import torch
 import torch.nn as nn
 from torch.utils.hooks import RemovableHandle
 
-from fairscale.nn import FullyShardedDataParallel
+from fairscale.nn.data_parallel.fsdp import FullyShardedDataParallel
 
 
 class TraceForwardEvent(NamedTuple):
