@@ -725,6 +725,7 @@ class ColumnParallelLinear(torch.nn.Module):
 
         bias = self.bias if not self.skip_bias_add else None
 
+        print(f"async_tensor_model_parallel_allreduce {self.async_tensor_model_parallel_allreduce}")
         if (
             self.async_tensor_model_parallel_allreduce
             or self.sequence_parallel
