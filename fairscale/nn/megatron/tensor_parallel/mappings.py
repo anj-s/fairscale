@@ -176,7 +176,7 @@ class _CopyToModelParallelRegion(torch.autograd.Function):
 
     @staticmethod
     def backward(ctx, grad_output):
-        print(f"reducing in BW on {torch.distributed.get_rank()}")
+        raise RuntimeError()
         return _reduce(grad_output)
 
 
