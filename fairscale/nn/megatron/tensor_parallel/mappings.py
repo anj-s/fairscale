@@ -172,7 +172,6 @@ class _CopyToModelParallelRegion(torch.autograd.Function):
 
     @staticmethod
     def forward(ctx, input_):
-        input_ = input_.clone()
         return input_
 
     @staticmethod
