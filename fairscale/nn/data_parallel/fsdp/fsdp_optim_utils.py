@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Any, Dict, Iterator, List, Tuple, cast
 
 import torch
 
-from fairscale.nn.misc import FlattenParamsWrapper
+from .flatten_params_wrapper import FlattenParamsWrapper
 
 if TYPE_CHECKING:
     from fairscale.nn.data_parallel.fsdp import FullyShardedDataParallel
