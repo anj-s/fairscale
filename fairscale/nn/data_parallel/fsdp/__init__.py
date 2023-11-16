@@ -15,8 +15,4 @@ from .fully_sharded_data_parallel import (
     no_pre_load_state_dict_hook,
 )
 
-if dist.is_available():
-    # Prevent import failure if dist is not available. #1057
-    from ..sharded_ddp import ShardedDataParallel
-
 __all__: List[str] = []
