@@ -48,9 +48,9 @@ from fairscale.nn.misc.parallel import (
 from fairscale.nn.misc.params import calc_grad_norm, recursive_copy_to_device
 from fairscale.nn.misc.reduce_scatter_bucketer import ReduceScatterBucketer
 from fairscale.nn.misc.state_dict import replace_by_prefix_
-from fairscale.nn.misc import FlattenParamsWrapper, _enable_pre_load_state_dict_hook
-from fairscale.nn.wrap import auto_wrap, config_auto_wrap_policy, enable_wrap
+from fairscale.tools import auto_wrap, config_auto_wrap_policy, enable_wrap
 
+from flatten_params_wrapper import FlattenParamsWrapper, _enable_pre_load_state_dict_hook
 from . import fsdp_optim_utils as ou
 
 if TYPE_CHECKING:

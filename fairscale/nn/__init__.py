@@ -14,6 +14,5 @@ if dist.is_available():
     # Prevent import failure if dist is not available. #1057
     from .data_parallel.fsdp import ShardedDataParallel
 
-from .misc import FlattenParamsWrapper
 
 __all__: List[str] = []
