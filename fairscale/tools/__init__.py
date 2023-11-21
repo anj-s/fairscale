@@ -6,6 +6,6 @@
 from typing import List
 
 from .auto_wrap import auto_wrap, config_auto_wrap_policy, default_auto_wrap_policy, enable_wrap, wrap
-from .layer_memory_tracker import LayerwiseMemoryTracker
+# from .layer_memory_tracker import LayerwiseMemoryTracker
 
 __all__: List[str] = []
