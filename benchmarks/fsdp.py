@@ -25,6 +25,7 @@ from torch.optim import Adam
 from benchmarks.golden_configs.lm_wikitext2 import FSDP as lm_wikitext2
 from fairscale.nn import auto_wrap, default_auto_wrap_policy, enable_wrap
 from fairscale.nn.data_parallel.fsdp import FullyShardedDataParallel as FSDP
+from fairscale.nn.data_parallel import OffloadConfig
 
 RPC_PORT = 29501
 
@@ -94,7 +95,10 @@ def get_lm_model(args, device, config):
     nhid = config["nhid"]
     ndecoder = config["num_decoder_layers"]
 
-    return transformer_lm.TransformerLM(vocab_size, ninp, nhead, nhid, dropout, initrange, ndecoder).to(device)
+    if args.ssd_offload:
+        return transformer_lm.TransformerLM(vocab_size, ninp, nhead, nhid, dropout, initrange, ndecoder)
+    else:
+        return transformer_lm.TransformerLM(vocab_size, ninp, nhead, nhid, dropout, initrange, ndecoder).to(device)
 
 
 def get_tensors_by_size_bucket():
@@ -196,7 +200,7 @@ def train(model_config, model, benchmark_config, model_specs, args):
         if i > 0:
             total_tokens += source.numel()
 
-        if args.benchmark_eval:
+        if args.benchmark_eval or args.ssd_offload:
             input = source.cuda()
             target = target.cuda()
             output = model(input)
@@ -352,7 +356,8 @@ def benchmark_fsdp(rank, args, world_size):
     model_config = create_model_config(args, benchmark_config=benchmark_config, model_specs=model_specs)
     model = model_config["model"]
     config = {}
-
+    if args.ssd_offload:
+        config["offload_config"] = OffloadConfig(offload_type="ssd_offload")
     if args.full_fp16:
         config["compute_dtype"] = torch.float16
         config["mixed_precision"] = False
@@ -386,6 +391,13 @@ parser.add_argument("--debug", action="store_true", default=False, help="Display
 parser.add_argument("--enable_auto_wrap", action="store_true", default=False, help="Use auto_wrap with FSDP")
 parser.add_argument("--benchmark_eval", action="store_true", default=False, help="Benchmark evaluation workflow.")
 parser.add_argument("--full_fp16", action="store_true", default=False, help="Benchmark in full fp16 mode.")
+parser.add_argument(
+    # TODO(anj-s): In the process of adding more models and hence the requirement for a flag.
+    "--model_name",
+    default="lm",
+    help="Language Model(LM) used to benchmark FSDP.",
+)
+parser.add_argument("--ssd_offload", action="store_true", default=False, help="Benchmark ssd_offload workflow.")
 
 if __name__ == "__main__":
     args = parser.parse_args()

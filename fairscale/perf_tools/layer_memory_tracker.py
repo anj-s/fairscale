@@ -260,7 +260,7 @@ class LayerwiseMemoryTracker:
         for name, m in model.named_modules():
             h1 = m.register_forward_pre_hook(self._create_pre_forward_hook(name))
             h2 = m.register_forward_hook(self._create_post_forward_hook(name))
-            h3 = m.register_backward_hook(self._create_backward_hook(name))
+            h3 = m.register_full_backward_hook(self._create_backward_hook(name))
             self._hooks.extend([h1, h2, h3])
             if isinstance(m, FullyShardedDataParallel):
                 if isinstance(m.process_group, ProcessGroupTracker):

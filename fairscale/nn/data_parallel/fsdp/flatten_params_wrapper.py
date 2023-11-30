@@ -8,6 +8,7 @@
 
 from contextlib import contextmanager
 from itertools import chain
+import tempfile
 import typing
 from typing import (
     TYPE_CHECKING,
@@ -30,6 +31,12 @@ import torch
 from torch import Tensor
 import torch.nn as nn
 
+from fairscale.nn.data_parallel.fsdp.ssd_offload import (
+        SsdFlatParameter,
+        SsdFlatParameterView,
+        SsdFlatParameterViewProperty,
+        _register_property,
+    )
 from fairscale.nn.misc.state_dict import replace_by_prefix_
 
 if TYPE_CHECKING:
@@ -155,8 +162,11 @@ class FlattenParamsWrapper(nn.Module):
         module: nn.Module,
         param_list: ParamGroups = None,
         flat_param_names: Optional[List[str]] = None,
+        ssd_offload: bool = False,
+        ssd_directory: str = "",
     ):
         super().__init__()
+        self.ssd_offload = ssd_offload
         self._fpw_module = module
         self.is_flattened = False
 
@@ -218,7 +228,14 @@ class FlattenParamsWrapper(nn.Module):
         # Init all flat_params.
         for new_p_set in self._param_sets:
             params, param_infos, shared_param_infos = self._init_flatten_params(new_p_set)
-            flat_param = FlatParameter(params, params[0].requires_grad)
+            if ssd_offload:
+                assert ssd_directory != ""
+                (handle, fname) = tempfile.mkstemp(dir=ssd_directory, suffix="ssd_buf_param")
+                flat_param = SsdFlatParameter.from_tensors(tensors=params)
+                flat_param.allow_unsafe_changes = True
+                flat_param.set_file_params(fname, 0)
+            else:
+                flat_param = FlatParameter(params, params[0].requires_grad)
             flat_param._param_infos = param_infos
             flat_param._shared_param_infos = shared_param_infos
             self.flat_params.append(flat_param)
@@ -365,8 +382,14 @@ class FlattenParamsWrapper(nn.Module):
         ps = self.get_param_views()
         param_views = []
         for (_, m, n), p in zip(self._param_infos, ps):
+            if self.ssd_offload:
+                assert isinstance(p, SsdFlatParameterView)
+                _register_property(m, n, SsdFlatParameterViewProperty(p.parent, p.id))
+
+            else:
+                setattr(m, n, p)  # This will set as plain attr
+                param_views.append(p)
             setattr(m, n, p)  # This will set as plain attr
-            param_views.append(p)
 
         # Save param views for easy access if anyone still wants to access
         # parameters of the module.
