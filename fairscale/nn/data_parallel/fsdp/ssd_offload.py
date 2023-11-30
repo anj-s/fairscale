@@ -17,18 +17,12 @@ import numpy as np
 import torch
 from torch.serialization import DEFAULT_PROTOCOL as DEFAULT_PROTOCOL
 
-from fairscale.internal import torch_version
 
 try:
     from torch.utils._pytree import tree_map
 except ImportError:
     # The PyTorch version(<1.9) we test with does not support the tree_map API.
     pass
-
-if torch_version() < (1, 12, 0):
-    raise ImportError(
-        f"ssd_offload only works on torch versions 1.12.0 and beyond, but torch version is: {torch.__version__}"
-    )
 
 DEFAULT_CHUNK_SIZE = 2048 * 2048
 
