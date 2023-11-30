@@ -8,6 +8,6 @@ from typing import List
 import torch.distributed as dist
 
 from .activation_checkpoint import checkpoint_wrapper
-from .data_parallel.fsdp import FullyShardedDataParallel
+from .data_parallel.fsdp.fully_sharded_data_parallel import FullyShardedDataParallel
 
 __all__: List[str] = []

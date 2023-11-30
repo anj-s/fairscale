@@ -314,28 +314,34 @@ class FullyShardedDataParallel(nn.Module):
     def __init__(
         self,
         module: nn.Module,
+        # n/w specs and optimizations
         process_group: Optional["ProcessGroup"] = None,
         # The type for the process_group_reduce_scatter only can be either ProcessGroup or ProcessGroupName
         process_group_reduce_scatter: Any = ProcessGroupName.reduce_scatter,
         reshard_after_forward: bool = True,
         disable_reshard_on_root: bool = True,
-        mixed_precision: bool = False,
         fp32_reduce_scatter: bool = False,
+        bucket_cap_mb: int = 25,
+        no_broadcast_optim_state: Optional[bool] = False,
+        # Move to it being always True
         flatten_parameters: bool = True,
-        move_params_to_cpu: bool = False,
+        # param, buffer dtype and other quantization specs
+        mixed_precision: bool = False,
         compute_dtype: Optional[torch.dtype] = None,
         buffer_dtype: Optional[torch.dtype] = None,
-        move_grads_to_cpu: Optional[bool] = None,
-        bucket_cap_mb: int = 25,
-        compute_device: Optional[torch.device] = None,
-        no_broadcast_optim_state: Optional[bool] = False,
-        state_dict_device: Optional[torch.device] = None,
-        clear_autocast_cache: bool = False,
         force_input_to_fp32: bool = False,
-        verbose: bool = False,
+        clear_autocast_cache: bool = False,
+        # Offload params
+        move_params_to_cpu: bool = False,
+        move_grads_to_cpu: Optional[bool] = None,
         cpu_offload: bool = False,
         offload_config: Optional[OffloadConfig] = None,
+        # State dict specs
         state_dict_on_rank_0_only: bool = False,
+        state_dict_device: Optional[torch.device] = None,
+        # Misc params 
+        compute_device: Optional[torch.device] = None,
+        verbose: bool = False,
         gradient_predivide_factor: Optional[float] = None,
         allow_reset_parameters: bool = False,
     ):
@@ -416,9 +422,6 @@ class FullyShardedDataParallel(nn.Module):
         if process_group:
             validate_process_group(self.compute_device, self.process_group)
 
-        # enable pytorch sync_bn just in case model contains sync_bn layers.
-        enable_pytorch_sync_bn(module)
-
         # Only handle params which are not already sharded. This enables
         # sharding individual layers of a Module, with an outer wrapper to
         # shard any leftover parameters.
@@ -436,14 +439,12 @@ class FullyShardedDataParallel(nn.Module):
         self.buffer_size = sum(p.numel() for p in params)
         self.ssd_directory = tempfile.gettempdir()
         if self.ssd_offload:
-            assert import_ssd_offload, "We need to import ssd_offload.py to enable the `ssd_offload` feature."
             if offload_config and offload_config.dir:
                 self.ssd_directory = offload_config.dir
             self.move_grads_to_cpu = True
             self.move_params_to_cpu = True
 
-        # For now, it is either all flatten or none flatten. This will be extended to
-        # multiple flatten groups in my next PR.
+        # For now, it is either all flatten or none flatten. 
         to_be_flatten_params: List[List[Parameter]] = [[]]
         non_flatten_params = params
         param_name_groups = [[n] for n in param_names]
@@ -730,7 +731,6 @@ class FullyShardedDataParallel(nn.Module):
                     self.numel_padded_per_param.append(0)
                     continue
             p._is_sharded = True
-            # TODO (Min): broadcast from rank 0 to avoid each rank need to init with the same seed?
 
             # Replace p.data with the relevant shard.
             orig_data = p.data
@@ -1298,7 +1298,6 @@ class FullyShardedDataParallel(nn.Module):
         if hasattr(p, "_fp32_shard"):
             return
 
-        # A single shard of the parameters in full precision.
         # A single shard of the parameters in full precision.
         # TODO(another-pjohnson) - I believe this will cause memory leakage with ssd
         # p.data returns a pointer to a handle, and that handle has it's
