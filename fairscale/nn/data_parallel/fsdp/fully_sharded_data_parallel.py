@@ -344,6 +344,7 @@ class FullyShardedDataParallel(nn.Module):
         verbose: bool = False,
         gradient_predivide_factor: Optional[float] = None,
         allow_reset_parameters: bool = False,
+        ssd_offload: bool = False,
     ):
         init_start = time.time()
         super().__init__()
@@ -406,7 +407,7 @@ class FullyShardedDataParallel(nn.Module):
         self.verbose = verbose
         self.state_dict_on_rank_0_only = state_dict_on_rank_0_only
         # Turn off SSD offload
-        self.ssd_offload = False
+        self.ssd_offload = ssd_offload
 
         self.gradient_predivide_factor: float = gradient_predivide_factor or self._get_gradient_predivide_factor(
             self.world_size
