@@ -382,14 +382,15 @@ class FlattenParamsWrapper(nn.Module):
         ps = self.get_param_views()
         param_views = []
         for (_, m, n), p in zip(self._param_infos, ps):
-            if self.ssd_offload:
-                assert isinstance(p, SsdFlatParameterView)
-                _register_property(m, n, SsdFlatParameterViewProperty(p.parent, p.id))
-
-            else:
-                setattr(m, n, p)  # This will set as plain attr
-                param_views.append(p)
             setattr(m, n, p)  # This will set as plain attr
+            param_views.append(p)
+            # if self.ssd_offload:
+            #     assert isinstance(p, SsdFlatParameterView)
+            #     _register_property(m, n, SsdFlatParameterViewProperty(p.parent, p.id))
+
+            # else:
+            #     setattr(m, n, p)  # This will set as plain attr
+            #     param_views.append(p)
 
         # Save param views for easy access if anyone still wants to access
         # parameters of the module.
