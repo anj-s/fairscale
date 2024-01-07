@@ -1695,22 +1695,6 @@ class FullyShardedDataParallel(nn.Module):
         self.assert_state([TrainingState.BACKWARD_PRE, TrainingState.BACKWARD_POST])
         self.training_state = TrainingState.BACKWARD_POST
 
-        if hasattr(param, "_linked_param"):
-            # This links to a shared param. We should try to finalize the linked param here.
-            # This is done by module code to ensure correct gradient computation.
-            # p._is_shared and p._linked_param are closely related but not the same.
-            # See fairscale/experimental/nn/mevo.py.
-            assert param.shape == (1,), param.shape  # This param should have this special dim.
-            # If the _is_shared flag is set, then this shared weight is indeed being
-            # shared between different FSDP wrappers. Otherwise, they are linked but
-            # likely in the same FSDP wrapper, which means we shouldn't finalize the
-            # linked param..
-            if hasattr(param._linked_param, "_is_shared") and param._linked_param._is_shared:
-                # param._linked_param may or may not have .grad since this callback
-                # could happen multiple times to support #918. Since we check `if param.grad is None`
-                # below anyway, this is OK.
-                param = param._linked_param
-
         if param.grad is None:
             return
 
@@ -1839,7 +1823,7 @@ class FullyShardedDataParallel(nn.Module):
     def _wait_for_post_backward(self) -> None:
         """Wait for post-backward to finish. Only called on root instance."""
         # None, backward runtime swallow the assert error, so we use p_assert() here.
-        p_assert(self._is_root, "WFPB not called on root")
+        p_assert(self._is_root, "Wait For Post Backward not called on root")
         # Check if the root module has params and if any of them has
         # the `requires_grad` field set. If `requires_grad=False` for
         # all the params, the post_backward hook will not fire and the
@@ -1852,7 +1836,7 @@ class FullyShardedDataParallel(nn.Module):
         if self._require_backward_grad_sync:
             # Flush any unreduced buckets in the post_backward stream.
             with torch.cuda.stream(self._streams["post_backward"]):
-                p_assert(self._reducer is not None, "WFPB: reducer is None")
+                p_assert(self._reducer is not None, "Wait For Post Backward: reducer is None")
                 assert self._reducer is not None  # make mypy happy
                 self._reducer.flush()
             torch.cuda.current_stream().wait_stream(self._streams["post_backward"])
