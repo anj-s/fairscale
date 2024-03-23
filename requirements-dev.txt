@@ -28,7 +28,8 @@ pynvml == 8.0.4
 
 # For mypy typing. It is important to have a fixed version. Otherwise, you
 # may run into mypy errors out differently for different versions.
-numpy == 1.22.0
+# TODO(anj): Removed
+# numpy == 1.22.0
 
 # For layerwise gradient scaler
 scikit-learn == 1.1.3
